@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0c0c0c">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="quiz-topbar">
+        <img src="assets/img/logo.svg" alt="16Arena" class="brand-logo">
+        <h2 id="title">Quiz</h2>
+    </div>
+
+    <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="hud-strip">
+        <div class="hud-cell" id="progress">
+            <span class="eyebrow">Question</span>
+            <span class="hud-value">&ndash;</span>
+        </div>
+        <div class="hud-cell quiz-running-score" id="runningScore" aria-live="polite">
+            <span class="eyebrow">Score</span>
+            <span class="hud-value">0</span>
+        </div>
+    </div>
+
+    <div class="timer-wrap" id="timerWrap">
+        <div class="timer-head">
+            <p id="timer">&ndash;&ndash;</p>
+        </div>
+        <div class="timer-track">
+            <div class="timer-fill" id="timerFill"></div>
+        </div>
+    </div>
+
+    <h3 id="question"></h3>
+
+    <button type="button" id="option1"></button>
+    <button type="button" id="option2"></button>
+    <button type="button" id="option3"></button>
+
+    <button type="button" id="skipBtn">Skip question</button>
+
+    <p id="status" class="quiz-status" style="display:none;"></p>
+
+    <div id="feedbackBanner" class="quiz-feedback-banner" role="status" aria-live="polite"></div>
+
+    <div id="nextCountdownOverlay" class="modal-overlay countdown-overlay" aria-live="polite">
+        <div class="countdown-card">
+            <p id="nextCountdownLabel" class="eyebrow" style="margin-bottom:10px;">Next question loading in</p>
+            <div id="nextCountdownNumber" class="countdown-number">5</div>
+        </div>
+    </div>
+
+    <script src="js/questions.js"></script>
+    <script src="js/quiz.js"></script>
+
+</body>
+</html>
