@@ -88,7 +88,7 @@
         try {
             sessionStorage.removeItem("quizResult");
             await runStartCountdown(QUIZ.startCountdownSeconds);
-            window.location.href = "quiz.html";
+            window.location.href = "quiz.html?v=55";
         } catch (err) {
             console.error(err);
             var overlay = document.getElementById("startCountdownOverlay");

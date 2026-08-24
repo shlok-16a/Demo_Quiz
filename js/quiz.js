@@ -2,15 +2,12 @@
     "use strict";
 
     var els = {
-        title: document.getElementById("title"),
         score: document.getElementById("runningScore"),
         scoreValue: document.querySelector("#runningScore .hud-value"),
         timer: document.getElementById("timer"),
         timerWrap: document.getElementById("timerWrap"),
         timerFill: document.getElementById("timerFill"),
         progress: document.getElementById("progress"),
-        progressValue: document.querySelector("#progress .hud-value"),
-        progressFill: document.getElementById("progressFill"),
         question: document.getElementById("question"),
         option1: document.getElementById("option1"),
         option2: document.getElementById("option2"),
@@ -18,6 +15,7 @@
         skip: document.getElementById("skipBtn"),
         status: document.getElementById("status"),
         banner: document.getElementById("feedbackBanner"),
+        card: document.querySelector(".question-card"),
         overlay: document.getElementById("nextCountdownOverlay"),
         overlayLabel: document.getElementById("nextCountdownLabel"),
         overlayNumber: document.getElementById("nextCountdownNumber")
@@ -37,7 +35,8 @@
         clockId: null,
         busy: false,
         finished: false,
-        startedAt: Date.now()
+        startedAt: Date.now(),
+        verdicts: []
     };
 
     function wait(ms) {
@@ -60,7 +59,13 @@
 
     function clearOptionStyles() {
         optionButtons.forEach(function (btn) {
-            btn.classList.remove("option-correct", "option-wrong");
+            btn.classList.remove(
+                "option-correct",
+                "option-wrong",
+                "option-selected",
+                "option-pulse",
+                "option-shake"
+            );
             btn.classList.add("option-idle");
             if (btn.blur) btn.blur();
         });
@@ -71,10 +76,46 @@
         els.banner.innerText = "";
     }
 
-    function showBanner(kind, message) {
-        els.banner.classList.remove("correct", "incorrect", "neutral");
-        els.banner.classList.add(kind, "show");
-        els.banner.innerText = message;
+    function haptic(kind) {
+        if (!navigator.vibrate) return;
+        try {
+            if (kind === "light") navigator.vibrate(14);
+            else navigator.vibrate([24, 40, 24]);
+        } catch (e) { /* ignore */ }
+    }
+
+    function burstConfetti(btn) {
+        var rect = btn.getBoundingClientRect();
+        var layer = document.createElement("div");
+        layer.className = "fx-burst";
+        document.body.appendChild(layer);
+
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + 10;
+        var colors = ["#4fe08c", "#ffc24d", "#fe8321", "#ffffff", "#7ee0ff"];
+        var sparkles = ["✨", "🎉", "✨"];
+
+        for (var i = 0; i < 16; i++) {
+            var p = document.createElement("span");
+            p.className = "fx-particle";
+            var ang = (Math.PI * 2 * i) / 16 + Math.random() * 0.4;
+            var dist = 28 + Math.random() * 48;
+            p.style.left = cx + "px";
+            p.style.top = cy + "px";
+            p.style.setProperty("--dx", (Math.cos(ang) * dist) + "px");
+            p.style.setProperty("--dy", (Math.sin(ang) * dist - 24) + "px");
+            if (i < sparkles.length) {
+                p.className = "fx-particle fx-emoji";
+                p.innerText = sparkles[i];
+            } else {
+                p.style.background = colors[i % colors.length];
+            }
+            layer.appendChild(p);
+        }
+
+        setTimeout(function () {
+            if (layer.parentNode) layer.parentNode.removeChild(layer);
+        }, 850);
     }
 
     function updateScore(value) {
@@ -83,6 +124,43 @@
         els.score.classList.remove("score-pop");
         void els.score.offsetWidth;
         els.score.classList.add("score-pop");
+    }
+
+    function flyPointsToScore(btn, text, kind, nextScore) {
+        var from = btn.getBoundingClientRect();
+        var to = els.score.getBoundingClientRect();
+        var startX = from.left + from.width / 2;
+        var startY = from.top + 6;
+        var endX = to.left + to.width / 2;
+        var endY = to.top + to.height / 2;
+
+        var el = document.createElement("span");
+        el.className = "fx-float fx-hold fx-" + kind;
+        el.innerText = text;
+        el.style.left = startX + "px";
+        el.style.top = startY + "px";
+        el.style.setProperty("--tx", (endX - startX) + "px");
+        el.style.setProperty("--ty", (endY - startY) + "px");
+        document.body.appendChild(el);
+
+        setTimeout(function () {
+            el.classList.remove("fx-hold");
+            el.classList.add("fx-fly");
+        }, 450);
+
+        setTimeout(function () {
+            updateScore(nextScore);
+        }, 1600);
+
+        setTimeout(function () {
+            if (el.parentNode) el.parentNode.removeChild(el);
+        }, 1950);
+    }
+
+    function showBanner(kind, message) {
+        els.banner.classList.remove("correct", "incorrect", "neutral");
+        els.banner.classList.add(kind, "show");
+        els.banner.innerText = message;
     }
 
     function stopClock() {
@@ -95,10 +173,41 @@
     function paintClock() {
         var secs = Math.max(0, state.remaining);
         var total = QUIZ.questionTimerSeconds || 1;
-        els.timer.innerText = secs + "s";
-        els.timerFill.style.transform =
-            "scaleX(" + Math.max(0, Math.min(1, secs / total)) + ")";
-        els.timerWrap.classList.toggle("critical", secs > 0 && secs <= 5);
+        var progress = Math.max(0, Math.min(1, secs / total));
+        els.timer.innerText = String(secs);
+        els.timerFill.style.strokeDashoffset = String(100 * (1 - progress));
+        els.timerWrap.classList.toggle("critical", secs > 0 && secs <= 3);
+    }
+
+    function paintQuestionPips() {
+        var el = els.progress;
+        if (!el) return;
+
+        var total = QUIZ.questions.length;
+        if (el.childElementCount !== total) {
+            el.innerHTML = "";
+            for (var i = 0; i < total; i++) {
+                el.appendChild(document.createElement("span"));
+            }
+        }
+
+        var pips = el.children;
+        for (var i = 0; i < pips.length; i++) {
+            var pip = pips[i];
+            var verdict = state.verdicts[i];
+            pip.className = "";
+            pip.innerText = "";
+            if (verdict === "correct") {
+                pip.className = "is-correct";
+                pip.innerText = "✓";
+            } else if (verdict === "wrong") {
+                pip.className = "is-wrong";
+                pip.innerText = "✕";
+            } else if (i === state.index) {
+                pip.className = "is-current";
+            }
+        }
+        el.setAttribute("aria-label", "Question " + (state.index + 1) + " of " + total);
     }
 
     function startClock() {
@@ -107,7 +216,7 @@
 
         els.timerFill.style.transition = "none";
         paintClock();
-        void els.timerFill.offsetWidth;
+        void els.timerFill.getBoundingClientRect();
         els.timerFill.style.transition = "";
 
         state.clockId = setInterval(function () {
@@ -151,8 +260,13 @@
         els.option2.innerText = q.option2;
         els.option3.innerText = q.option3;
 
-        els.progressValue.innerText = number + " / " + total;
-        els.progressFill.style.width = Math.min(100, (number / total) * 100) + "%";
+        if (els.card) {
+            els.card.classList.remove("card-flip-up");
+            void els.card.offsetWidth;
+            els.card.classList.add("card-flip-up");
+        }
+
+        paintQuestionPips();
 
         setButtonsDisabled(false);
         startClock();
@@ -200,6 +314,9 @@
         setButtonsDisabled(true);
 
         var result = showFeedback(selectedOption);
+        var picked = selectedOption >= 1 && selectedOption <= 3
+            ? optionButtons[selectedOption - 1]
+            : null;
 
         if (result.outcome === "correct") {
             state.correct += 1;
@@ -207,15 +324,32 @@
                 state.bonusPoints += result.bonus;
                 state.bonusAnswers += 1;
             }
-            updateScore(state.score + QUIZ.correctPoints + result.bonus);
+            haptic("light");
+            if (picked) {
+                picked.classList.add("option-pulse");
+                burstConfetti(picked);
+                flyPointsToScore(picked, formatPoints(QUIZ.correctPoints + result.bonus), "up", state.score + QUIZ.correctPoints + result.bonus);
+            } else {
+                updateScore(state.score + QUIZ.correctPoints + result.bonus);
+            }
         } else if (result.outcome === "wrong") {
             state.wrong += 1;
-            updateScore(state.score + QUIZ.wrongPoints);
+            haptic("error");
+            if (picked) {
+                picked.classList.add("option-shake");
+                flyPointsToScore(picked, formatPoints(QUIZ.wrongPoints), "down", state.score + QUIZ.wrongPoints);
+            } else {
+                updateScore(state.score + QUIZ.wrongPoints);
+            }
         } else {
             state.skipped += 1;
         }
 
-        await wait(selectedOption > 0 ? 1600 : 1400);
+        if (result.outcome === "correct") state.verdicts[state.index] = "correct";
+        else state.verdicts[state.index] = "wrong";
+        paintQuestionPips();
+
+        await wait(picked ? 2100 : 1400);
 
         if (state.index >= QUIZ.questions.length - 1) {
             finish();
@@ -261,7 +395,7 @@
         });
     });
 
-    els.title.innerText = QUIZ.title;
+    document.title = QUIZ.title || "Quiz";
     updateScore(0);
     renderQuestion();
 })();
