@@ -10,10 +10,20 @@
 </head>
 <body class="quiz-page">
 
-    <div class="quiz-nav">
+    <div class="quiz-topbar">
         <div class="quiz-score-chip quiz-running-score" id="runningScore" aria-live="polite">
             <span class="eyebrow">Score</span>
             <span class="hud-value">0</span>
+        </div>
+
+        <img src="assets/img/logo.svg" alt="16Arena" class="brand-logo">
+
+        <div class="topbar-actions">
+            <div class="quiz-score-chip streak-cell" id="streakCell" aria-live="polite">
+                <span class="eyebrow">Streak</span>
+                <span class="hud-value" id="streakValue">🔥 0</span>
+            </div>
+            <button type="button" class="sound-toggle-btn" onclick="SoundEngine.toggleSound()" aria-label="Toggle Sound">🔊</button>
         </div>
     </div>
 
@@ -29,13 +39,15 @@
     </div>
 
     <div class="question-stage">
-        <div class="question-card">
+        <div id="streakPopBanner" class="streak-pop-banner"></div>
+        <div class="question-card" id="questionCard">
             <h3 id="question"></h3>
 
             <div class="option-stack">
                 <button type="button" id="option1"></button>
                 <button type="button" id="option2"></button>
                 <button type="button" id="option3"></button>
+                <button type="button" id="option4"></button>
             </div>
         </div>
     </div>
@@ -53,8 +65,9 @@
         </div>
     </div>
 
-    <script src="js/questions.js?v=28"></script>
-    <script src="js/quiz.js?v=55"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/quiz.js"></script>
 
 </body>
 </html>

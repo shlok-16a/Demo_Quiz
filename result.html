@@ -11,6 +11,9 @@
 
     <div class="brand ar-rise">
         <img src="assets/img/logo.svg" alt="16Arena" class="brand-logo">
+        <div class="topbar-actions">
+            <button type="button" class="sound-toggle-btn" onclick="SoundEngine.toggleSound()" aria-label="Toggle Sound">🔊</button>
+        </div>
     </div>
 
     <div class="result-hero ar-rise">
@@ -32,6 +35,10 @@
             <span class="eyebrow">Skipped</span>
             <span class="hud-value">0</span>
         </div>
+        <div class="hud-cell" id="maxStreak">
+            <span class="eyebrow">Max Streak</span>
+            <span class="hud-value">🔥 0</span>
+        </div>
         <div class="hud-cell" id="bonus">
             <span class="eyebrow">Speed bonus</span>
             <span class="hud-value">0</span>
@@ -44,6 +51,7 @@
 
     <button type="button" id="backBtn" onclick="goBack()">Play again</button>
 
+    <script src="js/audio.js"></script>
     <script src="js/result.js"></script>
 
 </body>

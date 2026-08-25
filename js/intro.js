@@ -65,6 +65,7 @@
 
         for (var n = countdownSeconds; n >= 1; n--) {
             numberEl.innerText = String(n);
+            if (window.SoundEngine) window.SoundEngine.tick(n <= 2);
             numberEl.classList.remove("countdown-pop");
             void numberEl.offsetWidth;
             numberEl.classList.add("countdown-pop");
@@ -72,12 +73,15 @@
         }
 
         numberEl.innerText = "Go!";
+        if (window.SoundEngine) window.SoundEngine.correct(1);
         await wait(400);
     }
 
     async function onPoolPlayStart() {
         if (startInFlight) return;
         startInFlight = true;
+
+        if (window.SoundEngine) window.SoundEngine.click();
 
         var btn = document.getElementById("playStartBtn");
         if (btn) {
@@ -88,7 +92,7 @@
         try {
             sessionStorage.removeItem("quizResult");
             await runStartCountdown(QUIZ.startCountdownSeconds);
-            window.location.href = "quiz.html?v=55";
+            window.location.href = "quiz.html";
         } catch (err) {
             console.error(err);
             var overlay = document.getElementById("startCountdownOverlay");
