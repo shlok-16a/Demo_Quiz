@@ -72,9 +72,7 @@
             await wait(1000);
         }
 
-        numberEl.innerText = "Go!";
-        if (window.SoundEngine) window.SoundEngine.correct(1);
-        await wait(400);
+        overlay.style.display = "none";
     }
 
     async function onPoolPlayStart() {

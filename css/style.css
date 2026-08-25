@@ -861,7 +861,8 @@ button.option-wrong {
     padding: 30px 34px;
 }
 
-#nextCountdownLabel {
+#nextCountdownLabel,
+#startCountdownLabel {
     font-size: 15px;
     letter-spacing: 0.1em;
 }
@@ -1190,11 +1191,11 @@ input:focus {
 
 /* ---------- 16. Quiz play screen ---------- */
 
-html:has(body.quiz-page) {
+html:has(body.stage-page) {
     background: #070707;
 }
 
-body.quiz-page {
+body.stage-page {
     background:
         radial-gradient(130% 70% at 50% 100%, rgba(254, 131, 33, 0.42), transparent 72%),
         linear-gradient(180deg, #070707 0%, #101010 100%);
@@ -1202,7 +1203,7 @@ body.quiz-page {
     padding-top: max(12px, env(safe-area-inset-top));
 }
 
-body.quiz-page::before { display: none; }
+body.stage-page::before { display: none; }
 
 .quiz-nav {
     display: flex;
@@ -1773,4 +1774,229 @@ body.quiz-page #skipBtn:disabled { opacity: 0.45; }
         opacity: 0;
     }
 }
+
+/* ---------- 17. Intro + result (match quiz glass HUD) ---------- */
+
+body.stage-page .quiz-topbar .brand-logo {
+    height: 42px;
+    width: auto;
+}
+
+body.stage-page .sound-toggle-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+body.stage-page .sound-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+body.intro-page,
+body.result-page {
+    display: flex;
+    flex-direction: column;
+}
+
+body.intro-page .play-ready {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: left;
+}
+
+body.intro-page .question-stage {
+    margin-bottom: 12px;
+    padding-bottom: 0;
+}
+
+body.intro-page .question-stage::after {
+    display: none;
+}
+
+body.intro-page .intro-card {
+    padding: 16px 16px 12px;
+    border-radius: 20px;
+}
+
+body.intro-page .intro-card #playReadyTitle {
+    color: #fff;
+    font-size: 1.08rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    text-align: center;
+    margin: 0 0 12px;
+    text-wrap: balance;
+}
+
+body.intro-page .play-ready-rules-block {
+    margin: 0 0 10px;
+}
+
+body.intro-page .play-ready-heading {
+    color: rgba(255, 255, 255, 0.5);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+body.intro-page .play-ready-rules,
+body.intro-page .play-ready-scoring {
+    margin-top: 6px;
+}
+
+body.intro-page .play-ready-rules li,
+body.intro-page .play-ready-scoring li {
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0;
+    padding: 5px 0;
+    font-size: 12.5px;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.78);
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.intro-page .play-ready-rules .rule-icon,
+body.intro-page .play-ready-scoring .format-bullet {
+    flex: 0 0 1.1em;
+    width: 1.1em;
+    font-size: 0.95em;
+}
+
+body.intro-page .play-ready-scoring .format-bullet::before {
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+body.intro-page #playReadyRulesBlock {
+    margin-bottom: 0;
+}
+
+body.intro-page #playStartBtn,
+body.result-page #backBtn {
+    isolation: auto;
+    margin-top: auto;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    border-radius: 999px;
+    padding: 16px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+body.intro-page #playStartBtn {
+    margin-top: 4px;
+    padding: 13px;
+    font-size: 14px;
+}
+
+body.intro-page #playStartBtn::before,
+body.result-page #backBtn::before {
+    content: none;
+}
+
+body.intro-page #playStartBtn:hover:not(:disabled),
+body.result-page #backBtn:hover:not(:disabled) {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+body.intro-page #playStartBtn:hover:not(:disabled)::before,
+body.result-page #backBtn:hover:not(:disabled)::before {
+    background: none;
+}
+
+body.result-page .result-hero {
+    text-align: center;
+    margin-bottom: 0;
+    padding: 28px 20px 24px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 28px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 12px 32px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+body.result-page .result-hero #gameOverTitle {
+    color: #fff;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0 0 18px;
+}
+
+body.result-page .result-hero .eyebrow {
+    color: rgba(255, 255, 255, 0.55);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+body.result-page #score {
+    color: #fff;
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    font-size: 3.4rem;
+    margin-top: 10px;
+}
+
+body.result-page .result-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+body.result-page .result-stats .hud-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+body.result-page .result-stats .hud-cell .eyebrow {
+    margin-bottom: 0;
+    color: rgba(255, 255, 255, 0.55);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+body.result-page .result-stats .hud-cell .hud-value {
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+body.result-page #correct .hud-value { color: var(--win); }
+body.result-page #wrong .hud-value { color: var(--danger); }
+
 
