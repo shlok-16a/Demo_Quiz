@@ -65,19 +65,21 @@
 
         for (var n = countdownSeconds; n >= 1; n--) {
             numberEl.innerText = String(n);
+            if (window.SoundEngine) window.SoundEngine.tick(n <= 2);
             numberEl.classList.remove("countdown-pop");
             void numberEl.offsetWidth;
             numberEl.classList.add("countdown-pop");
             await wait(1000);
         }
 
-        numberEl.innerText = "Go!";
-        await wait(400);
+        overlay.style.display = "none";
     }
 
     async function onPoolPlayStart() {
         if (startInFlight) return;
         startInFlight = true;
+
+        if (window.SoundEngine) window.SoundEngine.click();
 
         var btn = document.getElementById("playStartBtn");
         if (btn) {

@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0c0c0c">
+    <meta name="theme-color" content="#070707">
+    <meta http-equiv="Cache-Control" content="no-cache">
     <title>Result</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=60">
 </head>
-<body>
+<body class="result-page stage-page">
 
-    <div class="brand ar-rise">
+    <div class="quiz-topbar">
         <img src="assets/img/logo.svg" alt="16Arena" class="brand-logo">
     </div>
 
-    <div class="result-hero ar-rise">
-        <h2 id="gameOverTitle">Quiz Completed</h2>
-        <span class="eyebrow" id="scoreLabel">Your Score</span>
-        <h3 id="score">0</h3>
+    <div class="question-stage">
+        <div class="question-card result-hero ar-rise">
+            <h2 id="gameOverTitle">Quiz Completed</h2>
+            <span class="eyebrow" id="scoreLabel">Your Score</span>
+            <h3 id="score">0</h3>
+        </div>
     </div>
 
     <div class="stat-grid result-stats ar-rise">
@@ -32,6 +35,10 @@
             <span class="eyebrow">Skipped</span>
             <span class="hud-value">0</span>
         </div>
+        <div class="hud-cell" id="maxStreak">
+            <span class="eyebrow">Max Streak</span>
+            <span class="hud-value">🔥 0</span>
+        </div>
         <div class="hud-cell" id="bonus">
             <span class="eyebrow">Speed bonus</span>
             <span class="hud-value">0</span>
@@ -44,6 +51,7 @@
 
     <button type="button" id="backBtn" onclick="goBack()">Play again</button>
 
+    <script src="js/audio.js"></script>
     <script src="js/result.js"></script>
 
 </body>

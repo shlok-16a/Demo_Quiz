@@ -29,18 +29,18 @@ const QUIZ = {
             correctOption: 3
         },
         {
+            questionText: "How many stumps make up a wicket?",
+            option1: "2",
+            option2: "3",
+            option3: "4",
+            correctOption: 2
+        },
+        {
             questionText: "What is a batter's score of zero called?",
             option1: "Duck",
             option2: "Goose",
             option3: "Owl",
             correctOption: 1
-        },
-        {
-            questionText: "How many legal deliveries make up a standard over?",
-            option1: "4",
-            option2: "6",
-            option3: "8",
-            correctOption: 2
         },
         {
             questionText: "Which format is played with 50 overs per side?",
