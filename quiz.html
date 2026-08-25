@@ -6,22 +6,20 @@
     <meta name="theme-color" content="#070707">
     <meta http-equiv="Cache-Control" content="no-cache">
     <title>Quiz</title>
-    <link rel="stylesheet" href="css/style.css?v=55">
+    <link rel="stylesheet" href="css/style.css?v=57">
 </head>
 <body class="quiz-page">
 
     <div class="quiz-topbar">
-        <div class="quiz-score-chip quiz-running-score" id="runningScore" aria-live="polite">
-            <span class="eyebrow">Score</span>
-            <span class="hud-value">0</span>
+        <div class="quiz-score-chip streak-cell" id="streakCell" aria-live="polite">
+            <span class="eyebrow">Streak</span>
+            <span class="hud-value" id="streakValue">🔥 0</span>
         </div>
 
-        <img src="assets/img/logo.svg" alt="16Arena" class="brand-logo">
-
         <div class="topbar-actions">
-            <div class="quiz-score-chip streak-cell" id="streakCell" aria-live="polite">
-                <span class="eyebrow">Streak</span>
-                <span class="hud-value" id="streakValue">🔥 0</span>
+            <div class="quiz-score-chip quiz-running-score" id="runningScore" aria-live="polite">
+                <span class="eyebrow">Score</span>
+                <span class="hud-value">0</span>
             </div>
             <button type="button" class="sound-toggle-btn" onclick="SoundEngine.toggleSound()" aria-label="Toggle Sound">🔊</button>
         </div>

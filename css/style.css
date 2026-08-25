@@ -376,14 +376,6 @@ button.icon-btn:hover:not(:disabled) {
     gap: 10px;
 }
 
-.quiz-topbar .brand-logo {
-    height: 34px;
-    width: auto;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
 .quiz-score-chip {
     display: flex;
     align-items: center;
