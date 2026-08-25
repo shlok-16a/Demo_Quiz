@@ -29,13 +29,11 @@ const QUIZ = {
             correctOption: 3
         },
         {
-            questionText: "Which protective equipment is worn by batters to protect their head?",
-            type: "image",
-            option1: { text: "Cricket Helmet", img: "assets/img/opt_helmet.png" },
-            option2: { text: "Wooden Bat", img: "assets/img/opt_bat.png" },
-            option3: { text: "Leather Ball", img: "assets/img/opt_ball.png" },
-            option4: { text: "Cricket Stumps", img: "assets/img/opt_stumps.png" },
-            correctOption: 1
+            questionText: "How many stumps make up a wicket?",
+            option1: "2",
+            option2: "3",
+            option3: "4",
+            correctOption: 2
         },
         {
             questionText: "What is a batter's score of zero called?",
